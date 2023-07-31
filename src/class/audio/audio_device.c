@@ -831,10 +831,7 @@ uint16_t tud_audio_int_n_write(uint8_t func_id, uint8_t const* buffer, uint16_t 
   // We write directly into the EP's buffer - abort if previous transfer not complete
   TU_VERIFY(!usbd_edpt_busy(_audiod_fct[func_id].rhport, _audiod_fct[func_id].ep_int));
 
-  // Check length
-  TU_VERIFY(len <= CFG_TUD_AUDIO_INT_EP_IN_SW_BUFFER_SIZE);
-
-  TU_VERIFY(tu_memcpy_s(_audiod_fct[func_id].ep_int_buf, buffer, len) == 0);
+  TU_VERIFY(tu_memcpy_s(_audiod_fct[func_id].ep_int_buf, CFG_TUD_AUDIO_INT_EP_IN_SW_BUFFER_SIZE, buffer, len) == 0);
 
   // Schedule transmit
   TU_VERIFY(usbd_edpt_xfer(_audiod_fct[func_id].rhport, _audiod_fct[func_id].ep_int, _audiod_fct[func_id].ep_int_buf, len));
