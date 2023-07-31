@@ -1,4 +1,4 @@
-/* 
+/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2021 Koji KITAYAMA
@@ -588,7 +588,7 @@ void hcd_int_disable(uint8_t rhport)
 uint32_t hcd_frame_number(uint8_t rhport)
 {
   (void)rhport;
-  /* The device must be reset at least once after connection 
+  /* The device must be reset at least once after connection
    * in order to start the frame counter. */
   if (_hcd.need_reset) hcd_port_reset(rhport);
   return USB0->FRAME;
@@ -822,9 +822,17 @@ bool hcd_edpt_xfer(uint8_t rhport, uint8_t dev_addr, uint8_t ep_addr, uint8_t *b
   return ret;
 }
 
+bool hcd_edpt_abort_xfer(uint8_t rhport, uint8_t dev_addr, uint8_t ep_addr) {
+  (void) rhport;
+  (void) dev_addr;
+  (void) ep_addr;
+  // TODO not implemented yet
+  return false;
+}
+
 // clear stall, data toggle is also reset to DATA0
-bool hcd_edpt_clear_stall(uint8_t dev_addr, uint8_t ep_addr)
-{
+bool hcd_edpt_clear_stall(uint8_t rhport, uint8_t dev_addr, uint8_t ep_addr) {
+  (void) rhport;
   unsigned const pipenum = find_pipe(dev_addr, ep_addr);
   if (!pipenum) return false;
   hw_endpoint_t volatile *regs = edpt_regs(pipenum - 1);
